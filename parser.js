@@ -41,7 +41,7 @@ const TESTS=[
 	}
 ];
 
-//Do not touch anything after this line, shitty code :D
+//Do not touch anything after this line, ugly code :D
 
 //Names for fields
 //[mode] [pullsel] [din] [dout] [pullen] [dir] [dinv]
