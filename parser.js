@@ -14,11 +14,11 @@ const TESTS=require('./custom/TESTS.js')(execAdb);
 //[mode] [pullsel] [din] [dout] [pullen] [dir] [dinv]
 const PIN_FIELDS=[
 	'MODE   ',
+	'PULLEN ',
 	'PULLSEL',
+	'DIR    ',
 	'DIN    ',
 	'DOUT   ',
-	'PULLEN ',
-	'DIR    ',
 	'DINV   '
 ];
 
