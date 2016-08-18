@@ -1,3 +1,4 @@
+"use strict";
 //By F6CF (aka Creeplays) for 4PDA
 //  Thanks for all SRT members!
 //Do not remove copyrights, pls :D
