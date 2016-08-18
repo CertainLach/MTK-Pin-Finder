@@ -4,7 +4,7 @@
 //Do not remove copyrights, pls :D
 
 //Specify adb binary
-const ADB_CMD='adb';
+const ADB_CMD='adbs.exe';
 
 //You can add custom tests here, fields:
 //	name:                                     Name of test
@@ -59,6 +59,30 @@ const PIN_FIELDS=[
 	'DIR    ',
 	'DINV   '
 ];
+
+const DEVICE_PREFIXES = {
+	pmic:  			["act", "wm83", "tps", "mt63", "fan53555", "ncp6", "max"],
+	camera:  		["ov", "gc", "sp", "imx", "s5k", "hi", "mt9", "gt2", "siv"],
+	touch:  		["gt", "ft", "s3", "gsl", "ektf", "msg", "mtk-tpd", "-ts", "synaptic"],
+	charger: 		["bq", "fan", "ncp", "cw2", "smb1360"],
+	alsps: 			["epl", "apds", "stk3", "ltr", "cm", "ap", "tmd", "rpr", "tmg", "al", "us"],
+	accelometer:  	["lis", "kx", "bma", "mma", "mxc", "mc", "lsm303d", "lsm330d", "adxl"],
+	magnetometr:  	["akm", "yamaha53", "bmm", "mmc3", "qmc", "lsm303m", "lsm330m", "s62"],
+	gyro: 			["mpu"]
+}
+
+const DEVICE_NAMES = {
+	pmic: 			'PMIC       ',
+	camera: 		'CAMERA     ',
+	touch: 			'TOUCHPANEL ',
+	charger: 		'CHARGER    ',
+	alsps: 			'ALS/PS     ',
+	accelometer: 	'ACCELOMETER',
+	magnetometr: 	'MAGNETOMETR',
+	gyro:  			'GYROSCOPE  ',
+	other: 			'OTHER      ',
+	lcm: 			'LCM        ' 
+};
 
 //Imports
 const exec = require('child_process').exec;
@@ -264,11 +288,66 @@ execAdb('devices',(d)=>{
 				});
 			});
 			break;
+		case '-e':
+			console.log('Detecting drivers...');
+			execAdb('shell ls /sys/bus/i2c/drivers/',res=>{
+				let drivers=res.split('\n');
+				drivers=drivers.map(driver=>driver.replace(/\r/g,''));
+				drivers=drivers.map(driver=>driver.toLowerCase())
+				drivers=drivers.filter(driver=>driver!='');
+				console.log('Got driver list');
+				console.log('Searching for LCM\'s');
+				execAdb('shell cat /proc/cmdline',cmdline=>{
+					//console.log('CMDLINE is '+cmdline);
+					cmdline=cmdline.split(' ');
+					cmdline=cmdline.map(cmd=>cmd.trim());
+					cmdline=cmdline.filter(cmd=>cmd!='');
+					cmdline=cmdline.filter(cmd=>cmd.indexOf('lcm=')==0);
+					cmdline=cmdline[0];
+					let lcm=cmdline.split('-')[1]
+					console.log('Searching for camera...');
+					execAdb('shell cat /system/lib/libcameracustom.so | grep -a SENSOR_DRVNAME_',drvnames=>{
+						drvnames=drvnames.split('SENSOR_DRVNAME_')[1].toLowerCase().split('\0');
+						drvnames=drvnames.filter(drvname=>drvname!='')
+						drvnames.forEach(drvname=>drivers.push(drvname));
+						drivers=new Set(drivers);
+						let devices={};
+						Object.keys(DEVICE_PREFIXES).forEach(key=>{
+							if(!devices[key])
+								devices[key]=[];
+							DEVICE_PREFIXES[key].forEach(name=>{
+								drivers.forEach(driver=>{
+									if(driver.indexOf(name)==0){
+										drivers.delete(driver);
+										devices[key].push(driver);
+									}
+								});
+							});
+						});
+						devices.lcm=[lcm];
+						devices.other=Array.from(drivers);
+						let o='TYPE          DRIVERS\n';
+						Object.keys(devices).forEach(type=>{
+							if(devices[type].length==0)
+								return;
+							o+=DEVICE_NAMES[type]+'   '+devices[type].shift()+'\n';
+							devices[type].forEach(device=>{
+								o+='              '+device+'\n';
+							})
+						})
+						console.log(o);
+					});
+				});
+			});
+
+
+			break;
 		default:
 			console.log('Usage:');
 			console.log('	node parser.js [action]');
 			console.log('Where action:');
 			console.log('	-d Dump mtgpio in readable format');
 			console.log('	-t Test all devices and find pins');
+			console.log('   -e Detect all drivers')
 	}
 });
