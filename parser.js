@@ -252,7 +252,11 @@ execAdb('devices',(d)=>{
 					cmdline=cmdline.filter(cmd=>cmd!='');
 					cmdline=cmdline.filter(cmd=>cmd.indexOf('lcm=')==0);
 					cmdline=cmdline[0];
-					let lcm=cmdline.split('-')[1]
+					let lcm;
+					if(!cmdline)
+						console.log('Cannot detect LCM');
+					else
+						lcm=cmdline.split('-')[1]
 					console.log('Searching for camera...');
 					execAdb('shell cat /system/lib/libcameracustom.so | grep -a SENSOR_DRVNAME_',drvnames=>{
 						drvnames=drvnames.split('SENSOR_DRVNAME_')[1].toLowerCase().split('\0');
@@ -272,7 +276,8 @@ execAdb('devices',(d)=>{
 								});
 							});
 						});
-						devices.lcm=[lcm];
+						if(lcm)
+							devices.lcm=[lcm];
 						devices.other=Array.from(drivers);
 						let o='TYPE          DRIVERS\n';
 						Object.keys(devices).forEach(type=>{
