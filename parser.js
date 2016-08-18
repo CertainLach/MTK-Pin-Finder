@@ -74,7 +74,7 @@ function execAdb (argument, callback) {
 
 //Parse mtgpio/pin
 function parsePins (pinsFile) {
-	out={};
+	let out={};
 	let lines=pinsFile.split('\n');
 	lines.pop();
 	lines.shift();
