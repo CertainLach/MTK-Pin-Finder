@@ -30,7 +30,7 @@ const TESTS=[
 		timeout:1000
 	},
 	{
-		name:'Screen',
+		name:'Screen & Touchpanel',
 		command:'input keyevent 26',
 		timeout:900
 	},
