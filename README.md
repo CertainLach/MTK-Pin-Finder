@@ -7,3 +7,4 @@
 ## Args:
   - -d - Dump all pins in readable format
   - -t - Find pins for devices
+  - -e - Find all drivers on device
