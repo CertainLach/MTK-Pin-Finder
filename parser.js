@@ -132,7 +132,7 @@ function runTest (test,cb,oldpins,returnCB){
 			pins=res;
 			if(test.func){
 				console.log('Found pre exec function, running...');
-				test.func(out=>runTest(test,out,pins,returnCB));
+				test.func(out=>runTest(test, out || 'DUMMY', pins, returnCB));
 			}else{
 				runTest(test,'DUMMY',pins,returnCB);
 			}
