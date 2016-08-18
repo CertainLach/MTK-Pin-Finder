@@ -167,7 +167,7 @@ execAdb('devices',(d)=>{
 		console.log('No devices!');
 		process.exit(0);
 	} else
-		if(!(d.split('\n')[1].indexOf('device')+1)){
+		if(! (( !(d.split('\n')[1].indexOf('recovery')+1) && (d.split('\n')[1].indexOf('device')+1) ) || ( (d.split('\n')[1].indexOf('recovery')+1) && !(d.split('\n')[1].indexOf('device')+1) ) )) {
 			console.log('No devices!');
 			process.exit(0);
 		}
