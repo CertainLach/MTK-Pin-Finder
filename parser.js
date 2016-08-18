@@ -4,7 +4,7 @@
 //Do not remove copyrights, pls :D
 
 //Specify adb binary
-const ADB_CMD='adbs.exe';
+const ADB_CMD='adb';
 
 //You can add custom tests here, fields:
 //	name:                                     Name of test
@@ -20,22 +20,22 @@ const TESTS=[
 	{
 		name:'Audio',
 		func:function(cb){
-			execAdb('shell ls /system/media/',(files)=>{
+			execAdb('shell ls /system/media/audio/alarms',(files)=>{
 				files=files.split('\n');
 				files=files.map(file=>file.replace(/\r/g,''));
-				files=files.filter(file=>!!(file.indexOf('.mp3')+1));
+				files=files.filter(file=>!!(file.indexOf('.ogg')+1));
 				if(!files[0]){
-					console.log('No mp3 files found in /system/media!');
+					console.log('No ogg files found in /system/media/audio/alarms!');
 					process.exit(0);
 				}
 				cb(files[0]);
 			});
 		},
-		command:'am start -a "android.intent.action.VIEW" -t "audio/mp3" -d "file:///system/media/%result%"',
+		command:'am start -a "android.intent.action.VIEW" -t "audio/ogg" -d "file:///system/media/audio/alarms/%result%"',
 		timeout:1000
 	},
 	{
-		name:'Screen',
+		name:'Screen & Touchpanel',
 		command:'input keyevent 26',
 		timeout:900
 	},
