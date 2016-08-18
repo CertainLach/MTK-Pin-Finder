@@ -19,10 +19,10 @@ const TESTS=[
 	{
 		name:'Audio',
 		func:function(cb){
-			execAdb('shell ls /system/media/',(files)=>{
+			execAdb('shell ls /system/media/audio/ui',(files)=>{
 				files=files.split('\n');
 				files=files.map(file=>file.replace(/\r/g,''));
-				files=files.filter(file=>!!(file.indexOf('.mp3')+1));
+				files=files.filter(file=>!!(file.indexOf('.ogg')+1));
 				cb(files[0]);
 			});
 		},
@@ -30,7 +30,7 @@ const TESTS=[
 		timeout:1000
 	},
 	{
-		name:'Screen',
+		name:'Screen & Touchpanel',
 		command:'input keyevent 26',
 		timeout:900
 	},
@@ -262,3 +262,4 @@ execAdb('devices',(d)=>{
 			console.log('	-t Test all devices and find pins');
 	}
 });
+
