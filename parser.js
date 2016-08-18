@@ -4,7 +4,7 @@
 //Do not remove copyrights, pls :D
 
 //Specify adb binary
-const ADB_CMD='adbs.exe';
+const ADB_CMD='adb';
 
 //You can add custom tests here, fields:
 //	name:                                     Name of test
