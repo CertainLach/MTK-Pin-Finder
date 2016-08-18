@@ -4,7 +4,7 @@
 //Do not remove copyrights, pls :D
 
 //Specify adb binary
-const ADB_CMD='adb';
+const ADB_CMD='adbs.exe';
 
 //You can add custom tests here, fields:
 //	name:                                     Name of test
@@ -24,6 +24,10 @@ const TESTS=[
 				files=files.split('\n');
 				files=files.map(file=>file.replace(/\r/g,''));
 				files=files.filter(file=>!!(file.indexOf('.mp3')+1));
+				if(!files[0]){
+					console.log('No mp3 files found in /system/media!');
+					process.exit(0);
+				}
 				cb(files[0]);
 			});
 		},
@@ -187,9 +191,14 @@ execAdb('devices',(d)=>{
 		console.log('Please specify correct ADB_CMD!');
 		process.exit(0);
 	}
-	if(d.split('\n')[1].charCodeAt(0)==13)
+	if(d.split('\n')[1].charCodeAt(0)==13){
 		console.log('No devices!');
-	else
+		process.exit(0);
+	} else
+		if(!(d.split('\n')[1].indexOf('device')+1)){
+			console.log('No devices!');
+			process.exit(0);
+		}
 		console.log('Detected: '+d.split('\n')[1]);
 	switch(args[0]){
 		case '-t':
