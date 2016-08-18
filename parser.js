@@ -128,6 +128,16 @@ function parseState (state) {
 	return out;
 }
 
+//Sleep function
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
 //Get diff between two states
 function parseStateDiff (state1,state2) {
 	state1=parseState(state1);
@@ -258,6 +268,8 @@ execAdb('devices',(d)=>{
 					else
 						lcm=cmdline.split('-')[1]
 					console.log('Searching for camera...');
+					execAdb('shell twrp mount system',tmp=>null);
+					sleep(2500);
 					execAdb('shell cat /system/lib/libcameracustom.so | grep -a SENSOR_DRVNAME_',drvnames=>{
 						drvnames=drvnames.split('SENSOR_DRVNAME_')[1].toLowerCase().split('\0');
 						drvnames=drvnames.filter(drvname=>drvname!='')
