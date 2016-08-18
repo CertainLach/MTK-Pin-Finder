@@ -208,6 +208,12 @@ function fixLen (str,len) {
 let args=process.argv;
 args.shift();args.shift();//Remove "node parser.js"
 
+console.log(`
+    MTK Multi Tool  Copyright (C) 2016  F6CF (hhhaker6@gmail.com)
+    This program comes with ABSOLUTELY NO WARRANTY.
+    This is free software, and you are welcome to redistribute it
+    under certain conditions, see LICENSE for details.
+`)
 //Entry point
 console.log('Searching for devices...');
 execAdb('devices',(d)=>{
