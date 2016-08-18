@@ -19,11 +19,11 @@ const TESTS=[
 	{
 		name:'Audio',
 		func:function(cb){
-			execAdb('shell ls /system/media/audio/ui',(files)=>{
+			execAdb('shell ls /system/media/audio/ringtones',(files)=>{
 				files=files.split('\n');
 				files=files.map(file=>file.replace(/\r/g,''));
 				files=files.filter(file=>!!(file.indexOf('.ogg')+1));
-				cb(files[0]);
+				cb(files[1]);
 			});
 		},
 		command:'am start -a "android.intent.action.VIEW" -t "audio/mp3" -d "file:///system/media/%result%"',
