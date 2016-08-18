@@ -1,0 +1,10 @@
+{
+	"pmic":  			["act", "wm83", "tps", "mt63", "fan53555", "ncp6", "max"],
+	"camera":  			["ov", "gc", "sp", "imx", "s5k", "hi", "mt9", "gt2", "siv"],
+	"touch":  			["gt", "b_gt", "cy", "eeti", "excp", "focaltech", "ft", "s3", "gn", "gsl", "ektf", "max", "melfas", "mms", "msg", "mtk-tpd", "it", "pixcir", "tangle", "tm", "-ts", "synaptic"],
+	"charger": 			["bq", "fan", "ncp", "cw2", "smb1360"],
+	"alsps": 			["epl", "apds", "stk3", "ltr", "cm", "ap", "tmd", "rpr", "tmg", "al", "us"],
+	"accelometer":  	["lis", "kx", "bma", "mma", "mxc", "mc", "mpu6", "lsm303d", "lsm330d", "adxl", "icm"],
+	"magnetometr":  	["akm", "yamaha53", "bmm", "mmc3", "qmc", "lsm303m", "lsm330m", "s62"],
+	"gyro": 			["mpu7", "mpu2", "mpu1", "itg"]
+}

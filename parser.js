@@ -6,45 +6,7 @@
 //Specify adb binary
 const ADB_CMD='adb';
 
-//You can add custom tests here, fields:
-//	name:                                     Name of test
-//	func (optional):                          Function to run before executing command, result will be placed to command
-//	command (Will be executed on device):     Command to run test, %result% will be replaced with result of running function
-//  	timeout (in ms):                          Time to wait before capturing pins after executing command
-const TESTS=[
-	{
-		name:'Flash',
-		command:'echo 1 > /sys/devices/platform/flashlight || echo 1 > /sys/devices/platform/flashlight/leds/flashlight/brightness',
-		timeout:500
-	},
-	{
-		name:'Audio',
-		func:function(cb){
-			execAdb('shell ls /system/media/audio/alarms',(files)=>{
-				files=files.split('\n');
-				files=files.map(file=>file.replace(/\r/g,''));
-				files=files.filter(file=>!!(file.indexOf('.ogg')+1));
-				if(!files[0]){
-					console.log('No ogg files found in /system/media/audio/alarms!');
-					process.exit(0);
-				}
-				cb(files[0]);
-			});
-		},
-		command:'am start -a "android.intent.action.VIEW" -t "audio/ogg" -d "file:///system/media/audio/alarms/%result%"',
-		timeout:1000
-	},
-	{
-		name:'Screen & Touchpanel',
-		command:'input keyevent 26',
-		timeout:900
-	},
-	{
-		name:'RIL (Will be broken after this, restart phone)',
-		command:'kill -9 `pidof rild` || stop service rild',
-		timeout:1500
-	}
-];
+const TESTS=require('./custom/TESTS.js')(execAdb);
 
 //Do not touch anything after this line, ugly code :D
 
@@ -60,29 +22,9 @@ const PIN_FIELDS=[
 	'DINV   '
 ];
 
-const DEVICE_PREFIXES = {
-	pmic:  			["act", "wm83", "tps", "mt63", "fan53555", "ncp6", "max"],
-	camera:  		["ov", "gc", "sp", "imx", "s5k", "hi", "mt9", "gt2", "siv"],
-	touch:  		["gt", "b_gt", "cy", "eeti", "excp", "focaltech", "ft", "s3", "gn", "gsl", "ektf", "max", "melfas", "mms", "msg", "mtk-tpd", "it", "pixcir", "tangle", "tm", "-ts", "synaptic"],
-	charger: 		["bq", "fan", "ncp", "cw2", "smb1360"],
-	alsps: 			["epl", "apds", "stk3", "ltr", "cm", "ap", "tmd", "rpr", "tmg", "al", "us"],
-	accelometer:  	["lis", "kx", "bma", "mma", "mxc", "mc", "mpu6", "lsm303d", "lsm330d", "adxl", "icm"],
-	magnetometr:  	["akm", "yamaha53", "bmm", "mmc3", "qmc", "lsm303m", "lsm330m", "s62"],
-	gyro: 			["mpu7", "mpu2", "mpu1", "itg"]
-}
+const DEVICE_PREFIXES = require('./custom/DEVICE_PREFIXES.json')
 
-const DEVICE_NAMES = {
-	pmic: 			'PMIC       ',
-	camera: 		'CAMERA     ',
-	touch: 			'TOUCHPANEL ',
-	charger: 		'CHARGER    ',
-	alsps: 			'ALS/PS     ',
-	accelometer: 	'ACCELOMETER',
-	magnetometr: 	'MAGNETOMETR',
-	gyro:  			'GYROSCOPE  ',
-	other: 			'OTHER      ',
-	lcm: 			'LCM        ' 
-};
+const DEVICE_NAMES = require('./custom/DEVICE_NAMES.json')
 
 //Imports
 const exec = require('child_process').exec;

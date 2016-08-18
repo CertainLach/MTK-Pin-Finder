@@ -1,0 +1,12 @@
+{
+	"pmic": 			"PMIC       ",
+	"camera": 			"CAMERA     ",
+	"touch": 			"TOUCHPANEL ",
+	"charger": 			"CHARGER    ",
+	"alsps": 			"ALS/PS     ",
+	"accelometer": 		"ACCELOMETER",
+	"magnetometr": 		"MAGNETOMETR",
+	"gyro":  			"GYROSCOPE  ",
+	"other": 			"OTHER      ",
+	"lcm": 				"LCM        " 
+}
